@@ -1,77 +1,64 @@
-import java.util.Scanner;
+import java.util.*;
 
-class Item {
-    String name;
-    double price;
-    int qty;
+class Item{
+    String itemName;
+    int price;
+    int qnty;
 
-    Item(String name, double price, int qty) {
-        this.name = name;
+    Item(String itemName,int price,int qnty){
+        this.itemName = itemName;
         this.price = price;
-        this.qty = qty;
-    }
-
-    double total() {
-        return price * qty;
+        this.qnty = qnty;
     }
 }
 
 class Bill {
-    Item[] items;
+    Item item[]; 
 
-    Bill(Item[] items) {
-        this.items = items;
+    Bill(Item[] item){
+        this.item = item;
     }
+    void showBill(){
+        StringBuilder receipt = new StringBuilder();
 
-    void showBill() {
-        double total = 0;
+        receipt.append("------ Grocery Bill ------\n");
 
-        System.out.println("\n---- BILL ----");
-        System.out.println("Name\tPrice\tQty\tTotal");
+        receipt.append("Item\tPrice\tQty\tTotal\n");
 
-        for (Item i : items) {
-            double itemTotal = i.total();
-            System.out.println(i.name + "\t" + i.price + "\t" + i.qty + "\t" + itemTotal);
-            total += itemTotal;
+        int Total = 0;
+        for(Item i:item){
+            int subTotal = i.price*i.qnty;
+
+            Total +=subTotal;
+            receipt.append(i.itemName +"\t"+i.price+"\t"+i.qnty+"\t"+subTotal+"\n");
+            
         }
+        float tax = (float)(Total*0.05);
+        receipt.append("\nTotal: "+Total+"\nTax(5%): "+tax+"\nGrand Total: "+(tax+Total));
 
-        double tax = total * 0.05;
-        double grandTotal = total + tax;
-
-        System.out.println("----------------");
-        System.out.println("Total: " + total);
-        System.out.println("Tax: " + tax);
-        System.out.println("Grand Total: " + grandTotal);
+        System.out.println(receipt.toString());
     }
-}
 
-public class GroceryProject {
-    public static void main(String[] args) {
+}
+public class GroceryProject{
+    public static void main(String[] ar){
         Scanner sc = new Scanner(System.in);
 
-        System.out.print("How many items? ");
         int n = sc.nextInt();
 
-        Item[] items = new Item[n];
+        Item item[] = new Item[n];
 
-        for (int i = 0; i < n; i++) {
-            System.out.println("\nItem " + (i + 1));
+        for(int i=0;i<n;i++){
 
-            System.out.print("Name: ");
             String name = sc.next();
-
-            System.out.print("Price: ");
-            double price = sc.nextDouble();
-
-            System.out.print("Qty: ");
-            int qty = sc.nextInt();
-
-            items[i] = new Item(name, price, qty);
+            int price = sc.nextInt();
+            int qnty = sc.nextInt();
+            item[i] = new Item(name,price,qnty);
         }
+        Bill a = new Bill(item);
 
-        Bill bill = new Bill(items);
-        bill.showBill();
 
-        sc.close();
+        a.showBill();
+
     }
 }
